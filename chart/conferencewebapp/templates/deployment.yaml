@@ -1,0 +1,71 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{  .Chart.Name }}-deployment"
+  labels:
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  template:
+    metadata:
+      labels:
+        app: "{{  .Chart.Name }}-selector"
+        version: "current"
+    spec:
+      containers:
+      - name: "{{  .Chart.Name  }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        readinessProbe:
+          exec:
+            command:
+            - grep
+            - CWWKF0011I
+            - /logs/messages.log
+{{ if .Values.istio.enabled }}
+{{ else }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9080
+{{  end }}
+        resources:
+          requests:
+            cpu: "{{ .Values.image.resources.requests.cpu }}"
+            memory: "{{ .Values.image.resources.requests.memory }}"
+        env:
+          - name: PORT
+            value: "{{ .Values.service.servicePort }}"
+          - name: APPLICATION_NAME
+            value: "{{ .Release.Name }}"
+          - name: APM_BM_GATEWAY_URL
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: apm_bm_gateway_url
+                optional: true
+          - name: APM_KEYFILE
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: apm_keyfile
+                optional: true
+          - name: APM_KEYFILE_PSWD
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: apm_keyfile_pswd
+                optional: true
+          - name: IBAM_INGRESS_URL
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: ibam_ingress_url
+                optional: true
+          - name: IBAM_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: ibam_token
+                optional: true
