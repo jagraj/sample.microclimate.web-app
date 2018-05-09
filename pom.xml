@@ -1,222 +1,273 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright 2016 Microprofile.io
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+<!-- ~ Copyright 2016 Microprofile.io ~ ~ Licensed under the Apache License, 
+	Version 2.0 (the "License"); ~ you may not use this file except in compliance 
+	with the License. ~ You may obtain a copy of the License at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 
+	~ ~ Unless required by applicable law or agreed to in writing, software ~ 
+	distributed under the License is distributed on an "AS IS" BASIS, ~ WITHOUT 
+	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. ~ See the 
+	License for the specific language governing permissions and ~ limitations 
+	under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>sample.microclimate</groupId>
-    <version>1.0.0-SNAPSHOT</version>
-    <artifactId>conferencewebapp</artifactId>
-    <name>Conference :: Web</name>
-    <packaging>war</packaging>
-    <profiles>
-      <profile>
-        <id>Linux_x86</id>
-        <activation>
-          <os>
-            <arch>!ppc64le</arch>
-          </os>
-        </activation>
-    <dependencies>
-      <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>arquillian-tomee-embedded</artifactId>
-            <version>7.0.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomee</groupId>
-            <artifactId>tomee-jaxrs</artifactId>
-            <version>7.0.1</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-          <plugin>
-              <groupId>io.fabric8</groupId>
-              <artifactId>docker-maven-plugin</artifactId>
-              <configuration>
-                <images>
-                  <image>
-                    <name>web-application</name>
-                    <build>
-                      <dockerFileDir>artifacts</dockerFileDir>
-                      <assembly>
-                        <descriptorRef>artifact</descriptorRef>
-                      </assembly>
-                    </build>
-                  </image>
-                </images>
-              </configuration>
-            </plugin>
-            <!--Deals with npm, bower and gulp-->
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.3</version>
-                <executions>
-                    <execution>
-                        <id>install-node-and-npm</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <configuration>
-                            <nodeVersion>v7.0.0</nodeVersion>
-                            <npmVersion>3.10.9</npmVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>npm-install</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>gulp-build</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>gulp</goal>
-                        </goals>
-                        <configuration>
-                            <!--<arguments>build-with-tests</arguments>-->
-                            <arguments>build</arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <installDirectory>node-installation-dir</installDirectory>
-                    <workingDirectory>src/main/static</workingDirectory>
-                </configuration>
-            </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-war-plugin</artifactId>
-            <version>3.0.0</version>
-            <configuration>
-                <failOnMissingWebXml>false</failOnMissingWebXml>
-                <attachClasses>true</attachClasses>
-                <webResources>
-                    <resource>
-                        <directory>target/static-resources</directory>
-                    </resource>
-                </webResources>
-            </configuration>
-        </plugin>
-        <plugin>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>3.0.0</version>
-            <configuration>
-                <filesets>
-                    <fileset>
-                        <directory>src/main/static/node_modules</directory>
-                    </fileset>
-                </filesets>
-            </configuration>
-        </plugin>
-        </plugins>
-    </build>
-  </profile>
-      <!--Power PC Architecture devices will not build a WAR file here: it will be curled in at docker build. The target/ directory must exist for the Dockerfile to work correctly. -->
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>sample.microclimate</groupId>
+	<version>1.0.0-SNAPSHOT</version>
+	<artifactId>conferencewebapp</artifactId>
+	<name>Conference :: Web</name>
+	<packaging>war</packaging>
+	<profiles>
+		<profile>
+			<id>Linux_x86</id>
+			<activation>
+				<os>
+					<arch>!ppc64le</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.tomee</groupId>
+					<artifactId>javaee-api</artifactId>
+					<version>7.0</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-lang3</artifactId>
+					<version>3.4</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.tomee</groupId>
+					<artifactId>arquillian-tomee-embedded</artifactId>
+					<version>7.0.2</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.apache.tomee</groupId>
+					<artifactId>tomee-jaxrs</artifactId>
+					<version>7.0.1</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.fabric8</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<configuration>
+							<images>
+								<image>
+									<name>web-application</name>
+									<build>
+										<dockerFileDir>artifacts</dockerFileDir>
+										<assembly>
+											<descriptorRef>artifact</descriptorRef>
+										</assembly>
+									</build>
+								</image>
+							</images>
+						</configuration>
+					</plugin>
+					<!--Deals with npm, bower and gulp -->
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.3</version>
+						<executions>
+							<execution>
+								<id>install-node-and-npm</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+								<configuration>
+									<nodeVersion>v7.0.0</nodeVersion>
+									<npmVersion>3.10.9</npmVersion>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm-install</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<configuration>
+									<arguments>install</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>gulp-build</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>gulp</goal>
+								</goals>
+								<configuration>
+									<!--<arguments>build-with-tests</arguments> -->
+									<arguments>build</arguments>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<installDirectory>node-installation-dir</installDirectory>
+							<workingDirectory>src/main/static</workingDirectory>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.0.0</version>
+						<configuration>
+							<failOnMissingWebXml>false</failOnMissingWebXml>
+							<attachClasses>true</attachClasses>
+							<webResources>
+								<resource>
+									<directory>target/static-resources</directory>
+								</resource>
+							</webResources>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>3.0.0</version>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>src/main/static/node_modules</directory>
+								</fileset>
+							</filesets>
+						</configuration>
+					</plugin>
+					<!-- Configure javametrics monitoring -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+							<execution>
+								<id>copy-javametrics-dash</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<stripVersion>true</stripVersion>
+									<outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/defaultServer/dropins</outputDirectory>
+									<includeArtifactIds>javametrics-dash</includeArtifactIds>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-javametrics-rest</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<stripVersion>true</stripVersion>
+									<outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/defaultServer/dropins</outputDirectory>
+									<includeArtifactIds>javametrics-rest</includeArtifactIds>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-javametrics-agent</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<stripVersion>true</stripVersion>
+									<outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/defaultServer/resources/</outputDirectory>
+									<includeArtifactIds>javametrics-agent</includeArtifactIds>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-javametrics-asm</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/liberty/wlp/usr/servers/defaultServer/resources/asm</outputDirectory>
+									<includeGroupIds>org.ow2.asm</includeGroupIds>
+									<includeArtifactIds>asm,asm-commons</includeArtifactIds>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!--Power PC Architecture devices will not build a WAR file here: it will 
+			be curled in at docker build. The target/ directory must exist for the Dockerfile 
+			to work correctly. -->
 
-      <profile>
-        <id>PowerPC</id>
-        <activation>
-          <os>
-            <arch>ppc64le</arch>
-          </os>
-        </activation>
-        <build>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-antrun-plugin</artifactId>
-              <version>1.7</version>
-              <executions>
-                <execution>
-                  <phase>generate-test-sources</phase>
-                  <configuration>
-                    <tasks>
-                      <echo message="Creating Target" />
-                      <mkdir dir="./target" />
-                    </tasks>
-                  </configuration>
-                  <goals>
-                    <goal>run</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-war-plugin</artifactId>
-              <version>3.0.0</version>
-              <configuration>
-                <skip>true</skip>
-              </configuration>
-            </plugin>
-          </plugins>
-        </build>
-      </profile>
+		<profile>
+			<id>PowerPC</id>
+			<activation>
+				<os>
+					<arch>ppc64le</arch>
+				</os>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<phase>generate-test-sources</phase>
+								<configuration>
+									<tasks>
+										<echo message="Creating Target" />
+										<mkdir dir="./target" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.0.0</version>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 
 
-        <profile>
-            <id>security</id>
-            <properties>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.8</version>
-                        <executions>
-                            <execution>
-                                <phase>prepare-package</phase>
-                                <configuration>
-                                    <target>
-                                        <ant antfile="applySecurity.xml"></ant>
-                                    </target>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+		<profile>
+			<id>security</id>
+			<properties>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<phase>prepare-package</phase>
+								<configuration>
+									<target>
+										<ant antfile="applySecurity.xml"></ant>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 
 		<profile>
 			<id>microclimate</id>
@@ -241,8 +292,8 @@
 							<installDirectory>/opt/ibm/wlp</installDirectory>
 							<userDirectory>${project.build.directory}/liberty/wlp/usr</userDirectory>
 							<configFile>${basedir}/src/main/liberty/config/server.xml</configFile>
-							<!-- <serverEnv>${basedir}/src/main/liberty/config/server.env</serverEnv> -->
-							<!--<jvmOptionsFile>${basedir}/src/main/liberty/config/jvm.options</jvmOptionsFile>-->
+                            <serverEnv>${basedir}/src/main/liberty/config/server.env</serverEnv>
+                            <jvmOptionsFile>${basedir}/src/main/liberty/config/jvm.options</jvmOptionsFile>
 							<packageFile>${package.file}</packageFile>
 							<include>${packaging.type}</include>
 							<bootstrapProperties>
@@ -255,5 +306,5 @@
 				</plugins>
 			</build>
 		</profile>
-    </profiles>
+	</profiles>
 </project>
