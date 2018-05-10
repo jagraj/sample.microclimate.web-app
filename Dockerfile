@@ -1,7 +1,6 @@
 FROM websphere-liberty:webProfile7
 COPY server.xml /opt/ibm/wlp/usr/servers/defaultServer/server.xml
 COPY /target/liberty/wlp/usr/servers/defaultServer /config/
-COPY /target/liberty/wlp/usr/shared/resources /config/resources/
 COPY /src/main/liberty/config/jvmbx.options /config/jvm.options
 RUN installUtility install --acceptLicense defaultServer
 #checks if the sample app is being built on power architecture, pulls a pre-built .war file if so due to missing modules on PPC
