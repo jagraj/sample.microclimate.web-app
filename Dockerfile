@@ -1,5 +1,5 @@
 FROM websphere-liberty:webProfile7
-COPY server.xml /opt/ibm/wlp/usr/servers/defaultServer/server.xml
+COPY /src/main/liberty/config/server.xml /opt/ibm/wlp/usr/servers/defaultServer/server.xml
 COPY /target/liberty/wlp/usr/servers/defaultServer /config/
 COPY /src/main/liberty/config/jvmbx.options /config/jvm.options
 RUN installUtility install --acceptLicense defaultServer

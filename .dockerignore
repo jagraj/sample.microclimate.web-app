@@ -1,2 +1,5 @@
 src/**
 target/*/**
+!/src/main/liberty/config/server.xml
+!/target/liberty/wlp/usr/servers/defaultServer/**
+!/src/main/liberty/config/jvmbx.options
