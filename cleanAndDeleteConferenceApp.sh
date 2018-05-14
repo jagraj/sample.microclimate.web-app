@@ -7,46 +7,46 @@ docker rmi $(docker images -f "dangling=true" -q)
 
 echo "Delete web-application"
 cd "$(dirname "$0")"
-helm delete web-app --purge
+helm delete conferencewebapp --purge
 sleep 30
 mvn clean
-docker rmi -f web-application
+docker rmi -f conferencewebapp
 
 sleep 10
 
 echo "Delete microservice-session"
-cd ../*session
-helm delete session --purge
+cd ../sample.microclimate.session
+helm delete conferencesession --purge
 sleep 30
 mvn clean
-docker rmi -f microservice-session
+docker rmi -f conferencesession
 
 sleep 10
 
 echo "Delete microservice-speaker"
-cd ../*speaker
-helm delete speaker --purge
+cd ../sample.microclimate.speaker
+helm delete conferencespeaker --purge
 sleep 30
 mvn clean
-docker rmi -f microservice-speaker
+docker rmi -f conferencespeaker
 
 sleep 10
 
 echo "Delete microservice-schedule"
-cd ../*schedule
-helm delete schedule --purge
+cd ../sample.microclimate.schedule
+helm delete conferenceschedule --purge
 sleep 30
 mvn clean
-docker rmi -f microservice-schedule
+docker rmi -f conferenceschedule
 
 sleep 10
 
-echo "Delete microservice-vote"
-cd ../*vote
-helm delete vote --purge
+echo "Delete microservice-conferencevote"
+cd ../sample.microclimate.vote
+helm delete conferencevote --purge
 sleep 30
 mvn clean
-docker rmi -f microservice-vote
+docker rmi -f conferencevote
 
 docker rm -v $(docker ps -a -q -f "status=exited")
 docker rmi $(docker images -f "dangling=true" -q)

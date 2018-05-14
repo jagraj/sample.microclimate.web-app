@@ -54,9 +54,8 @@ RUN mkdir -p /opt/mvn; \
 
 RUN mkdir -m 777 -p /config/resources
 
-#RUN apt-get -qq update && apt-get -qq -y install bzip2 \
-#python \
-#build-essential
+RUN apt-get -qq update && apt-get -qq -y install bzip2 \
+build-essential
 
 ENV JAVA_HOME=/root/java \
     PATH=/root/java/jre/bin:/opt/mvn/apache-maven/bin:$PATH
